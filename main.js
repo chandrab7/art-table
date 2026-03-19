@@ -186,7 +186,58 @@
  * over designated hero or decorative sections.
  */
 (function SparkleTrail() {
-  // TODO: implement sparkle trail cursor effect
+  // Disable on touch devices
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+  // Respect prefers-reduced-motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var POOL_MAX = 30;
+  var THROTTLE_MS = 30;
+  var COLORS = ['#d4a853', '#e8b4b8', '#ffffff', '#f5f0eb']; // gold, blush, white, cream
+  var activeSparkles = [];
+  var lastSpawnTime = 0;
+
+  function spawnSparkle(x, y) {
+    var count = 1 + Math.floor(Math.random() * 2); // 1-2 sparkles
+    for (var i = 0; i < count; i++) {
+      // Remove oldest if at pool limit
+      if (activeSparkles.length >= POOL_MAX) {
+        var oldest = activeSparkles.shift();
+        if (oldest && oldest.parentNode) oldest.parentNode.removeChild(oldest);
+      }
+
+      var el = document.createElement('div');
+      el.className = 'sparkle';
+      var size = 2 + Math.random() * 3; // 2-5px
+      var offsetX = (Math.random() - 0.5) * 16; // -8 to 8
+      var offsetY = (Math.random() - 0.5) * 16;
+      var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      var driftX = (Math.random() - 0.5) * 20; // horizontal drift
+
+      el.style.width = size + 'px';
+      el.style.height = size + 'px';
+      el.style.left = (x + offsetX) + 'px';
+      el.style.top = (y + offsetY) + 'px';
+      el.style.background = color;
+      el.style.setProperty('--sx', driftX + 'px');
+
+      document.body.appendChild(el);
+      activeSparkles.push(el);
+
+      el.addEventListener('animationend', function () {
+        if (el.parentNode) el.parentNode.removeChild(el);
+        var idx = activeSparkles.indexOf(el);
+        if (idx > -1) activeSparkles.splice(idx, 1);
+      });
+    }
+  }
+
+  document.addEventListener('mousemove', function (e) {
+    var now = Date.now();
+    if (now - lastSpawnTime < THROTTLE_MS) return;
+    lastSpawnTime = now;
+    spawnSparkle(e.clientX, e.clientY);
+  });
 })();
 
 /**

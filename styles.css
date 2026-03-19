@@ -550,6 +550,23 @@ select:focus-visible {
 }
 
 /* ==========================================================================
+   Sparkle Trail
+   ========================================================================== */
+
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  animation: sparkleFloat 0.6s ease-out forwards;
+}
+
+@keyframes sparkleFloat {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--sx, 5px), 20px) scale(0); opacity: 0; }
+}
+
+/* ==========================================================================
    Reduced Motion
    ========================================================================== */
 
