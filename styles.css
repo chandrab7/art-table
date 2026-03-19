@@ -175,10 +175,14 @@ select:focus-visible {
 .nav-logo {
   font-family: var(--font-heading);
   color: var(--blush);
-  font-size: 14px;
+  font-size: 18px;
   text-transform: uppercase;
   letter-spacing: 3px;
   white-space: nowrap;
+}
+
+.nav-logo img {
+  height: 48px;
 }
 
 .nav-links {
@@ -191,7 +195,7 @@ select:focus-visible {
   font-family: var(--font-body);
   font-variant: small-caps;
   color: var(--mist);
-  font-size: 12px;
+  font-size: 15px;
   letter-spacing: 2px;
   position: relative;
   padding: var(--space-xs) 0;
