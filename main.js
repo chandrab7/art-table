@@ -275,6 +275,45 @@
       }
     }, { passive: true });
   }
+
+  // ===== Welcome sparkle shower (all devices) =====
+  // A cascade of sparkles raining down after the hero entrance animation
+  setTimeout(function () {
+    var vw = window.innerWidth;
+    var totalSparkles = isTouchDevice ? 25 : 40;
+    var duration = 2000; // shower lasts 2 seconds
+
+    for (var i = 0; i < totalSparkles; i++) {
+      (function (index) {
+        var delay = Math.random() * duration;
+        setTimeout(function () {
+          var x = Math.random() * vw;
+          var y = -5 + Math.random() * 30; // spawn just above/at top of viewport
+          // Create a sparkle with extra downward drift
+          var el = document.createElement('div');
+          el.className = 'sparkle sparkle-shower';
+          var size = 2 + Math.random() * 4;
+          var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+          var driftX = (Math.random() - 0.5) * 40;
+
+          el.style.width = size + 'px';
+          el.style.height = size + 'px';
+          el.style.left = x + 'px';
+          el.style.top = y + 'px';
+          el.style.background = color;
+          el.style.setProperty('--sx', driftX + 'px');
+          el.style.setProperty('--sy', (80 + Math.random() * 120) + 'px');
+
+          document.body.appendChild(el);
+
+          el.addEventListener('animationend', function () {
+            if (el.parentNode) el.parentNode.removeChild(el);
+          });
+        }, delay);
+      })(i);
+    }
+  }, 1800); // start after hero entrance animations finish
+
 })();
 
 /**
