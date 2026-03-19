@@ -535,6 +535,83 @@
 })();
 
 /**
+ * ButtonSparkle
+ * Spawns sparkle particles along button edges on hover.
+ * Desktop only — disabled on touch devices and reduced motion.
+ */
+(function ButtonSparkle() {
+  // Skip on touch devices
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+  // Respect prefers-reduced-motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var COLORS = ['#d4a853', '#e8b4b8', '#ffffff']; // gold, blush, white
+
+  function spawnEdgeSparkles(btn) {
+    var rect = btn.getBoundingClientRect();
+    var count = 6 + Math.floor(Math.random() * 5); // 6-10 particles
+
+    for (var i = 0; i < count; i++) {
+      var el = document.createElement('div');
+      el.className = 'sparkle';
+      var size = 2 + Math.random() * 3;
+      var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+
+      // Pick a random position along one of the four edges
+      var edge = Math.floor(Math.random() * 4);
+      var x, y, driftX, driftY;
+      switch (edge) {
+        case 0: // top
+          x = rect.left + Math.random() * rect.width;
+          y = rect.top;
+          driftX = (Math.random() - 0.5) * 20;
+          driftY = -(10 + Math.random() * 15);
+          break;
+        case 1: // bottom
+          x = rect.left + Math.random() * rect.width;
+          y = rect.bottom;
+          driftX = (Math.random() - 0.5) * 20;
+          driftY = 10 + Math.random() * 15;
+          break;
+        case 2: // left
+          x = rect.left;
+          y = rect.top + Math.random() * rect.height;
+          driftX = -(10 + Math.random() * 15);
+          driftY = (Math.random() - 0.5) * 20;
+          break;
+        case 3: // right
+          x = rect.right;
+          y = rect.top + Math.random() * rect.height;
+          driftX = 10 + Math.random() * 15;
+          driftY = (Math.random() - 0.5) * 20;
+          break;
+      }
+
+      el.style.width = size + 'px';
+      el.style.height = size + 'px';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.background = color;
+      el.style.setProperty('--sx', driftX + 'px');
+      el.style.setProperty('--sy', driftY + 'px');
+
+      document.body.appendChild(el);
+
+      el.addEventListener('animationend', function () {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      });
+    }
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('mouseenter', function () {
+      spawnEdgeSparkles(btn);
+    });
+  });
+})();
+
+/**
  * ContactForm
  * Handles contact form validation, submission (via Formspree or similar),
  * success/error messaging, and input field animations.

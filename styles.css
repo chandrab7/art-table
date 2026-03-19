@@ -1216,7 +1216,7 @@ section h2 {
 
 @keyframes sparkleFloat {
   0% { transform: translate(0, 0) scale(1); opacity: 1; }
-  100% { transform: translate(var(--sx, 5px), 20px) scale(0); opacity: 0; }
+  100% { transform: translate(var(--sx, 5px), var(--sy, 20px)) scale(0); opacity: 0; }
 }
 
 /* ==========================================================================
