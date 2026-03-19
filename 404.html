@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Art of the Table</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 50%, #16213e 100%);
+      color: #f5f0eb;
+      font-family: 'Raleway', sans-serif;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', Georgia, serif;
+      color: #e8b4b8;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 40px;
+    }
+
+    .error-code {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 120px;
+      color: #e8b4b8;
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .error-heading {
+      font-family: 'Playfair Display', Georgia, serif;
+      color: white;
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .error-subtitle {
+      font-family: 'Dancing Script', cursive;
+      color: #e8b4b8;
+      font-size: 24px;
+      margin-bottom: 40px;
+    }
+
+    .btn-home {
+      display: inline-block;
+      padding: 14px 36px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Raleway', sans-serif;
+      text-decoration: none;
+      border-radius: 2px;
+      cursor: pointer;
+      background: #e8b4b8;
+      color: #0d0d1a;
+      border: 1px solid #e8b4b8;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .btn-home:hover {
+      background: #d4a0a4;
+      box-shadow: 0 0 20px rgba(212, 168, 83, 0.3), 0 0 40px rgba(212, 168, 83, 0.1);
+    }
+
+    .btn-home:focus-visible {
+      outline: 2px solid #e8b4b8;
+      outline-offset: 3px;
+      box-shadow: 0 0 0 5px rgba(212, 168, 83, 0.3);
+    }
+
+    .copyright {
+      position: absolute;
+      bottom: 24px;
+      color: #3a4455;
+      font-size: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .error-code { font-size: 80px; }
+      .error-heading { font-size: 22px; }
+      .error-subtitle { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-text">Art of the Table</div>
+  <div class="error-code">404</div>
+  <h1 class="error-heading">Oops! This page doesn't exist</h1>
+  <p class="error-subtitle">Let's get you back to making memories</p>
+  <a href="index.html" class="btn-home">BACK TO HOME</a>
+  <p class="copyright">&copy; 2026 Art of the Table. All rights reserved.</p>
+</body>
+</html>
