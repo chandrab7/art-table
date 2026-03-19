@@ -535,6 +535,44 @@
 })();
 
 /**
+ * Parallax
+ * Applies subtle parallax scroll effects to the hero content and particle canvas.
+ * Disabled on mobile (< 768px) and when prefers-reduced-motion is active.
+ */
+(function Parallax() {
+  if (window.innerWidth < 768) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var heroContent = document.querySelector('.hero-content');
+  var canvas = document.getElementById('particle-canvas');
+  if (!heroContent && !canvas) return;
+
+  // Add will-change hint for GPU compositing
+  if (heroContent) heroContent.style.willChange = 'transform';
+  if (canvas) canvas.style.willChange = 'transform';
+
+  var ticking = false;
+
+  function updateParallax() {
+    var scrollY = window.scrollY;
+    if (heroContent) {
+      heroContent.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
+    }
+    if (canvas) {
+      canvas.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
+    }
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
+/**
  * ButtonSparkle
  * Spawns sparkle particles along button edges on hover.
  * Desktop only — disabled on touch devices and reduced motion.
