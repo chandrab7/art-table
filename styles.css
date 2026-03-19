@@ -1232,6 +1232,8 @@ section h2 {
   object-fit: cover;
   object-position: center top;
   transition: transform var(--transition-normal);
+  image-rendering: auto;
+  filter: brightness(1.05) contrast(1.05);
 }
 
 .team-member:hover .team-photo img {
