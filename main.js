@@ -246,7 +246,33 @@
  * as they scroll into the viewport, triggering CSS animations.
  */
 (function ScrollReveal() {
-  // TODO: implement scroll-reveal with IntersectionObserver
+  var selectors = '.reveal, .reveal-left, .reveal-right, .shimmer-divider';
+  var elements = document.querySelectorAll(selectors);
+  if (!elements.length) return;
+
+  // Respect prefers-reduced-motion: make everything visible immediately
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    elements.forEach(function (el) {
+      el.classList.add('visible');
+    });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target); // one-shot
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  elements.forEach(function (el) {
+    observer.observe(el);
+  });
 })();
 
 /**
