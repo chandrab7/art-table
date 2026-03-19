@@ -10,7 +10,174 @@
  * Creates a subtle, dreamy atmosphere with soft blush and gold particles.
  */
 (function ParticleCanvas() {
-  // TODO: implement canvas particle animation
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var canvas = document.getElementById('particle-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  // Configuration
+  var isMobile = window.innerWidth < 768;
+  var isSmallMobile = window.innerWidth < 480;
+  if (isSmallMobile) return; // disable entirely on small screens
+
+  var heroParticleCount = isMobile ? 15 : 50;
+  var bgParticleCount = isMobile ? 8 : 18;
+  var colors = ['#d4a853', '#e8b4b8', '#d4a853', '#f5f0eb']; // gold, blush, gold, cream
+
+  var particles = [];
+  var burstParticles = [];
+  var width, height;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight * 3; // extend below viewport
+  }
+
+  // Particle class
+  function Particle(zone) {
+    this.zone = zone; // 'hero' or 'bg'
+    var heroH = window.innerHeight;
+    this.x = Math.random() * width;
+    this.y = zone === 'hero' ? Math.random() * heroH : heroH + Math.random() * heroH * 2;
+    this.size = 2 + Math.random() * 4;
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+    this.baseOpacity = zone === 'hero' ? 0.3 + Math.random() * 0.5 : 0.1 + Math.random() * 0.2;
+    this.opacity = this.baseOpacity;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.2;
+    this.twinklePhase = Math.random() * Math.PI * 2;
+    this.twinkleSpeed = 0.01 + Math.random() * 0.02;
+    this.isStar = !isMobile && Math.random() < 0.08; // 8% chance of being a star particle
+    if (this.isStar) this.size = 6 + Math.random() * 4;
+    this.rotation = 0;
+    this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+  }
+
+  Particle.prototype.update = function () {
+    this.x += this.vx + Math.sin(this.twinklePhase * 0.5) * 0.1;
+    this.y += this.vy;
+    this.twinklePhase += this.twinkleSpeed;
+    this.opacity = this.baseOpacity * (0.5 + 0.5 * Math.sin(this.twinklePhase));
+    this.rotation += this.rotationSpeed;
+
+    // Wrap around
+    if (this.x < -10) this.x = width + 10;
+    if (this.x > width + 10) this.x = -10;
+    var maxY = this.zone === 'hero' ? window.innerHeight : window.innerHeight * 3;
+    var minY = this.zone === 'hero' ? 0 : window.innerHeight;
+    if (this.y < minY - 10) this.y = maxY;
+    if (this.y > maxY + 10) this.y = minY;
+  };
+
+  Particle.prototype.draw = function () {
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
+    if (this.isStar) {
+      // Draw 4-point star
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle = this.color;
+      ctx.fillRect(-this.size / 2, -1, this.size, 2);
+      ctx.fillRect(-1, -this.size / 2, 2, this.size);
+    } else {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+    ctx.restore();
+  };
+
+  // Burst particle for "Memories!" entrance
+  function BurstParticle(x, y) {
+    this.x = x;
+    this.y = y;
+    var angle = Math.random() * Math.PI * 2;
+    var speed = 2 + Math.random() * 6;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.size = 1 + Math.random() * 3;
+    this.color = ['#d4a853', '#e8b4b8', '#ffffff', '#f5f0eb'][Math.floor(Math.random() * 4)];
+    this.life = 30 + Math.random() * 30;
+    this.maxLife = this.life;
+  }
+
+  BurstParticle.prototype.update = function () {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vx *= 0.96; // decelerate
+    this.vy *= 0.96;
+    this.life--;
+  };
+
+  BurstParticle.prototype.draw = function () {
+    var progress = this.life / this.maxLife;
+    ctx.save();
+    ctx.globalAlpha = progress;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * progress, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.restore();
+  };
+
+  function sparkBurst(x, y, count) {
+    for (var i = 0; i < count; i++) {
+      burstParticles.push(new BurstParticle(x, y));
+    }
+  }
+
+  function init() {
+    resize();
+    for (var i = 0; i < heroParticleCount; i++) particles.push(new Particle('hero'));
+    for (var i = 0; i < bgParticleCount; i++) particles.push(new Particle('bg'));
+
+    // Trigger sparkle burst on "Memories!" text after entrance animation
+    if (!prefersReducedMotion) {
+      setTimeout(function () {
+        var memoriesEl = document.querySelector('.hero-memories');
+        if (memoriesEl) {
+          var rect = memoriesEl.getBoundingClientRect();
+          sparkBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 25);
+        }
+      }, 1700); // after the 0.9s delay + 0.8s animation
+    }
+  }
+
+  var frameCount = 0;
+  function animate() {
+    frameCount++;
+    // Skip every other frame on mobile for performance
+    if (isMobile && frameCount % 2 !== 0) {
+      requestAnimationFrame(animate);
+      return;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+
+    if (!prefersReducedMotion) {
+      particles.forEach(function (p) { p.update(); p.draw(); });
+      burstParticles.forEach(function (p) { p.update(); p.draw(); });
+      burstParticles = burstParticles.filter(function (p) { return p.life > 0; });
+    } else {
+      // Static draw for reduced motion
+      particles.forEach(function (p) { p.draw(); });
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', resize);
+  init();
+  if (!prefersReducedMotion) {
+    animate();
+  } else {
+    particles.forEach(function (p) { p.draw(); }); // static single draw
+  }
+
+  // Expose sparkBurst for other modules
+  window.particleSparkBurst = sparkBurst;
 })();
 
 /**
