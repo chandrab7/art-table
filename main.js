@@ -540,5 +540,68 @@
  * success/error messaging, and input field animations.
  */
 (function ContactForm() {
-  // TODO: implement contact form handling
+  var form = document.getElementById('contact-form');
+  var successDiv = document.getElementById('form-success');
+  var errorDiv = document.getElementById('form-error');
+  var retryBtn = document.getElementById('form-retry');
+  if (!form) return;
+
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Remove invalid class on input
+  form.querySelectorAll('input, textarea, select').forEach(function (field) {
+    field.addEventListener('input', function () {
+      field.classList.remove('invalid');
+    });
+    field.addEventListener('change', function () {
+      field.classList.remove('invalid');
+    });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var valid = true;
+    var requiredFields = form.querySelectorAll('[required]');
+
+    requiredFields.forEach(function (field) {
+      field.classList.remove('invalid');
+      if (!field.value.trim()) {
+        field.classList.add('invalid');
+        valid = false;
+      }
+      if (field.type === 'email' && field.value && !emailRegex.test(field.value)) {
+        field.classList.add('invalid');
+        valid = false;
+      }
+    });
+
+    if (!valid) return;
+
+    var formData = new FormData(form);
+
+    fetch('https://formspree.io/f/YOUR_ID', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    }).then(function (res) {
+      if (res.ok) {
+        form.style.display = 'none';
+        successDiv.classList.add('active');
+      } else {
+        form.style.display = 'none';
+        errorDiv.classList.add('active');
+      }
+    }).catch(function () {
+      form.style.display = 'none';
+      errorDiv.classList.add('active');
+    });
+  });
+
+  if (retryBtn) {
+    retryBtn.addEventListener('click', function () {
+      errorDiv.classList.remove('active');
+      form.style.display = '';
+    });
+  }
 })();
