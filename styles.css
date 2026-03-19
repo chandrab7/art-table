@@ -968,6 +968,23 @@ section h2 {
   gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
+  justify-items: center;
+}
+
+/* Center the last row if it has fewer than 3 items */
+.blog-grid .blog-card:last-child:nth-child(3n+1) {
+  grid-column: 2;
+}
+
+.blog-grid .blog-card:nth-last-child(2):nth-child(3n+1) {
+  grid-column: 1 / 2;
+  justify-self: end;
+  max-width: calc(100% - 12px);
+}
+
+.blog-grid .blog-card:last-child:nth-child(3n+2) {
+  justify-self: start;
+  max-width: calc(100% - 12px);
 }
 
 .blog-card {
@@ -981,6 +998,15 @@ section h2 {
 
 .blog-image {
   aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.blog-image img {
+  transition: transform var(--transition-normal);
+}
+
+.blog-card:hover .blog-image img {
+  transform: scale(1.05);
 }
 
 .blog-content {
@@ -1007,6 +1033,15 @@ section h2 {
 .blog-date {
   color: var(--slate);
   font-size: 12px;
+}
+
+.blog-excerpt {
+  color: var(--mist);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 8px;
+  font-family: var(--font-body);
+  font-weight: 300;
 }
 
 .blog-card:hover,
