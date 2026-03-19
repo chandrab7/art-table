@@ -631,6 +631,71 @@ section h2 {
 }
 
 /* ==========================================================================
+   About Section
+   ========================================================================== */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.about-image img {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--blush);
+  box-shadow: 0 0 30px rgba(212, 168, 83, 0.2);
+  display: block;
+  margin: 0 auto;
+}
+
+.about-text h2 {
+  font-family: var(--font-heading);
+  color: white;
+  font-size: 32px;
+}
+
+.about-text p {
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: var(--cream);
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.pull-quote {
+  font-family: var(--font-handwritten);
+  font-size: 28px;
+  color: var(--blush);
+  margin: 24px 0;
+  padding-left: 20px;
+  border-left: 2px solid var(--gold);
+}
+
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .about-text h2,
+  .about-text .section-label {
+    text-align: center !important;
+  }
+
+  .pull-quote {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
+/* ==========================================================================
    Scroll Reveal
    ========================================================================== */
 
