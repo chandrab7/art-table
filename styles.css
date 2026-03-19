@@ -142,10 +142,6 @@ select:focus-visible {
 }
 
 /* ==========================================================================
-   Reduced Motion
-   ========================================================================== */
-
-/* ==========================================================================
    Navigation
    ========================================================================== */
 
@@ -214,11 +210,13 @@ select:focus-visible {
 }
 
 .nav-link:hover,
+.nav-link:focus-visible,
 .nav-link.active {
   color: var(--blush);
 }
 
 .nav-link:hover::after,
+.nav-link:focus-visible::after,
 .nav-link.active::after {
   width: 100%;
 }
@@ -426,15 +424,19 @@ select:focus-visible {
 }
 
 .btn-outline:hover,
-.btn-solid:hover {
+.btn-outline:focus-visible,
+.btn-solid:hover,
+.btn-solid:focus-visible {
   box-shadow: 0 0 20px rgba(212, 168, 83, 0.3), 0 0 40px rgba(212, 168, 83, 0.1);
 }
 
-.btn-outline:hover {
+.btn-outline:hover,
+.btn-outline:focus-visible {
   background: rgba(232, 180, 184, 0.1);
 }
 
-.btn-solid:hover {
+.btn-solid:hover,
+.btn-solid:focus-visible {
   background: #d4a0a4;
 }
 
@@ -618,7 +620,8 @@ section h2 {
   line-height: 1.7;
 }
 
-.service-card:hover {
+.service-card:hover,
+.service-card:focus-visible {
   transform: translateY(-8px);
   box-shadow: 0 8px 30px rgba(212, 168, 83, 0.15);
   border-color: var(--gold);
@@ -661,7 +664,8 @@ section h2 {
   color: var(--blush);
 }
 
-.filter-tabs button:hover {
+.filter-tabs button:hover,
+.filter-tabs button:focus-visible {
   border-color: var(--blush);
 }
 
@@ -687,7 +691,8 @@ section h2 {
   transition: transform var(--transition-normal);
 }
 
-.portfolio-item:hover .placeholder-img {
+.portfolio-item:hover .placeholder-img,
+.portfolio-item:focus-visible .placeholder-img {
   transform: scale(1.05);
 }
 
@@ -718,7 +723,8 @@ section h2 {
   letter-spacing: 1px;
 }
 
-.portfolio-item:hover .portfolio-overlay {
+.portfolio-item:hover .portfolio-overlay,
+.portfolio-item:focus-visible .portfolio-overlay {
   opacity: 1;
 }
 
@@ -874,7 +880,8 @@ section h2 {
   transition: background var(--transition-fast), color var(--transition-fast);
 }
 
-.social-icon:hover {
+.social-icon:hover,
+.social-icon:focus-visible {
   background: var(--blush);
   color: var(--deep-night);
 }
@@ -1002,7 +1009,8 @@ section h2 {
   font-size: 12px;
 }
 
-.blog-card:hover {
+.blog-card:hover,
+.blog-card:focus-visible {
   transform: translateY(-4px);
   border-color: rgba(232, 180, 184, 0.4);
   box-shadow: 0 8px 30px rgba(212, 168, 83, 0.1);
@@ -1071,7 +1079,8 @@ section h2 {
   margin-top: 4px;
 }
 
-.product-card:hover {
+.product-card:hover,
+.product-card:focus-visible {
   border-color: var(--gold);
   transform: translateY(-4px);
   box-shadow: 0 8px 30px rgba(212, 168, 83, 0.15);
@@ -1093,7 +1102,8 @@ section h2 {
   background: transparent;
 }
 
-.btn-outline-gold:hover {
+.btn-outline-gold:hover,
+.btn-outline-gold:focus-visible {
   background: rgba(212, 168, 83, 0.1);
   box-shadow: 0 0 20px rgba(212, 168, 83, 0.3), 0 0 40px rgba(212, 168, 83, 0.1);
 }
@@ -1277,5 +1287,20 @@ footer {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .reveal,
+  .reveal-left,
+  .reveal-right {
+    opacity: 1;
+    transform: none;
+  }
+
+  .shimmer-divider {
+    width: 80px;
+  }
+
+  .hero-anim {
+    opacity: 1;
   }
 }
