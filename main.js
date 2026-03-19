@@ -509,7 +509,29 @@
  * for an interactive, tactile feel.
  */
 (function ProductTilt() {
-  // TODO: implement product card tilt effect
+  // Skip on touch devices
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var cards = document.querySelectorAll('.product-card');
+  if (!cards.length) return;
+
+  cards.forEach(function (card) {
+    card.addEventListener('mousemove', function (e) {
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left - rect.width / 2;
+      var y = e.clientY - rect.top - rect.height / 2;
+      var rotateY = (x / (rect.width / 2)) * 8;
+      var rotateX = -(y / (rect.height / 2)) * 8;
+      card.style.transform = 'perspective(1000px) rotateY(' + rotateY + 'deg) rotateX(' + rotateX + 'deg) translateY(-4px)';
+    });
+
+    card.addEventListener('mouseleave', function () {
+      card.style.transition = 'transform 0.4s ease';
+      card.style.transform = '';
+      setTimeout(function () { card.style.transition = ''; }, 400);
+    });
+  });
 })();
 
 /**
