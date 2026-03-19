@@ -186,11 +186,10 @@
  * over designated hero or decorative sections.
  */
 (function SparkleTrail() {
-  // Disable on touch devices
-  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
-  // Respect prefers-reduced-motion
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
+  var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  // Respect prefers-reduced-motion (checked below for both desktop and mobile paths)
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) return;
   var POOL_MAX = 30;
   var THROTTLE_MS = 30;
   var COLORS = ['#d4a853', '#e8b4b8', '#ffffff', '#f5f0eb']; // gold, blush, white, cream
@@ -232,12 +231,50 @@
     }
   }
 
-  document.addEventListener('mousemove', function (e) {
-    var now = Date.now();
-    if (now - lastSpawnTime < THROTTLE_MS) return;
-    lastSpawnTime = now;
-    spawnSparkle(e.clientX, e.clientY);
-  });
+  if (!isTouchDevice) {
+    // Desktop: cursor trail
+    document.addEventListener('mousemove', function (e) {
+      var now = Date.now();
+      if (now - lastSpawnTime < THROTTLE_MS) return;
+      lastSpawnTime = now;
+      spawnSparkle(e.clientX, e.clientY);
+    });
+  } else {
+    // Mobile: tap burst — spawn 8-12 sparkles at tap location
+    document.addEventListener('touchstart', function (e) {
+      var touch = e.touches[0];
+      if (!touch) return;
+      var count = 8 + Math.floor(Math.random() * 5); // 8-12 sparkles
+      for (var i = 0; i < count; i++) {
+        (function(delay) {
+          setTimeout(function() {
+            spawnSparkle(touch.clientX, touch.clientY);
+          }, delay);
+        })(i * 30); // stagger over ~360ms for a spreading burst effect
+      }
+    }, { passive: true });
+
+    // Mobile: scroll sparkles — gold dust drifts down as you scroll
+    var lastScrollY = window.scrollY;
+    var scrollSparkleThrottle = 0;
+    window.addEventListener('scroll', function () {
+      var now = Date.now();
+      if (now - scrollSparkleThrottle < 150) return; // throttle to every 150ms
+      scrollSparkleThrottle = now;
+
+      var delta = Math.abs(window.scrollY - lastScrollY);
+      lastScrollY = window.scrollY;
+      if (delta < 20) return; // only on meaningful scroll
+
+      // Spawn 2-4 sparkles at random horizontal positions near top of viewport
+      var count = 2 + Math.floor(Math.random() * 3);
+      for (var i = 0; i < count; i++) {
+        var x = Math.random() * window.innerWidth;
+        var y = 10 + Math.random() * 60; // near top of viewport
+        spawnSparkle(x, y);
+      }
+    }, { passive: true });
+  }
 })();
 
 /**
