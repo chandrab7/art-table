@@ -116,8 +116,63 @@
     </section>
 
     <section id="portfolio">
-      <!-- Portfolio gallery section -->
+      <div class="shimmer-divider"></div>
+      <span class="section-label">OUR WORK</span>
+      <h2>Memories We've Made</h2>
+      <div class="filter-tabs">
+        <button class="active" data-filter="all">ALL</button>
+        <button data-filter="weddings">WEDDINGS</button>
+        <button data-filter="showers">SHOWERS</button>
+        <button data-filter="gift-boxes">GIFT BOXES</button>
+        <button data-filter="corporate">CORPORATE</button>
+      </div>
+      <div class="portfolio-grid">
+        <div class="portfolio-item reveal" data-category="weddings">
+          <div class="placeholder-img" style="background:linear-gradient(135deg,#1a1a2e,#2a1a3e,#16213e)"></div>
+          <div class="portfolio-overlay"><span>Elegant Garden Wedding</span><small>Wedding</small></div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-1" data-category="weddings">
+          <div class="placeholder-img" style="background:linear-gradient(135deg,#16213e,#1a2a3e,#0d0d1a)"></div>
+          <div class="portfolio-overlay"><span>Romantic Ballroom Reception</span><small>Wedding</small></div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-2" data-category="showers">
+          <div class="placeholder-img" style="background:linear-gradient(135deg,#2a1a2e,#1a1a2e,#16213e)"></div>
+          <div class="portfolio-overlay"><span>Blush Baby Shower</span><small>Shower</small></div>
+        </div>
+        <div class="portfolio-item reveal" data-category="gift-boxes">
+          <div class="placeholder-img" style="background:linear-gradient(135deg,#0d0d1a,#1a2a3e,#2a1a3e)"></div>
+          <div class="portfolio-overlay"><span>Bridal Proposal Box</span><small>Gift Box</small></div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-1" data-category="corporate">
+          <div class="placeholder-img" style="background:linear-gradient(135deg,#1a1a2e,#0f3460,#16213e)"></div>
+          <div class="portfolio-overlay"><span>Corporate Gala Dinner</span><small>Corporate</small></div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-2" data-category="weddings">
+          <div class="placeholder-img" style="background:linear-gradient(135deg,#16213e,#2a1a3e,#1a1a2e)"></div>
+          <div class="portfolio-overlay"><span>Rustic Vineyard Wedding</span><small>Wedding</small></div>
+        </div>
+        <div class="portfolio-item reveal" data-category="showers">
+          <div class="placeholder-img" style="background:linear-gradient(135deg,#1a2a3e,#1a1a2e,#0d0d1a)"></div>
+          <div class="portfolio-overlay"><span>Golden Bridal Shower</span><small>Shower</small></div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-1" data-category="gift-boxes">
+          <div class="placeholder-img" style="background:linear-gradient(135deg,#2a1a2e,#0d0d1a,#16213e)"></div>
+          <div class="portfolio-overlay"><span>Thank You Gift Set</span><small>Gift Box</small></div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-2" data-category="corporate">
+          <div class="placeholder-img" style="background:linear-gradient(135deg,#0f3460,#1a1a2e,#2a1a3e)"></div>
+          <div class="portfolio-overlay"><span>Annual Awards Banquet</span><small>Corporate</small></div>
+        </div>
+      </div>
     </section>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image lightbox">
+      <button class="lightbox-close" aria-label="Close lightbox"><i class="fas fa-times"></i></button>
+      <button class="lightbox-arrow lightbox-prev" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
+      <button class="lightbox-arrow lightbox-next" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
+      <div class="lightbox-image"></div>
+      <div class="lightbox-caption"></div>
+    </div>
 
     <section id="shop">
       <!-- Etsy products / shop section -->

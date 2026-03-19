@@ -378,7 +378,26 @@
  * Provides animated transitions when filtering.
  */
 (function PortfolioFilter() {
-  // TODO: implement portfolio category filtering
+  var buttons = document.querySelectorAll('.filter-tabs button');
+  var items = document.querySelectorAll('.portfolio-item');
+  if (!buttons.length || !items.length) return;
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      buttons.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      var filter = btn.getAttribute('data-filter');
+
+      items.forEach(function (item) {
+        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+          item.classList.remove('filtered-out');
+        } else {
+          item.classList.add('filtered-out');
+        }
+      });
+    });
+  });
 })();
 
 /**
@@ -387,7 +406,101 @@
  * with prev/next navigation and keyboard controls.
  */
 (function Lightbox() {
-  // TODO: implement image lightbox
+  var lightbox = document.getElementById('lightbox');
+  if (!lightbox) return;
+
+  var closeBtn = lightbox.querySelector('.lightbox-close');
+  var prevBtn = lightbox.querySelector('.lightbox-prev');
+  var nextBtn = lightbox.querySelector('.lightbox-next');
+  var imageContainer = lightbox.querySelector('.lightbox-image');
+  var caption = lightbox.querySelector('.lightbox-caption');
+
+  var currentIndex = 0;
+  var triggerElement = null;
+  var touchStartX = 0;
+
+  function getVisibleItems() {
+    return Array.from(document.querySelectorAll('.portfolio-item:not(.filtered-out)'));
+  }
+
+  function showItem(index) {
+    var items = getVisibleItems();
+    if (!items.length) return;
+    currentIndex = (index + items.length) % items.length;
+    var item = items[currentIndex];
+    var placeholder = item.querySelector('.placeholder-img');
+    var overlay = item.querySelector('.portfolio-overlay');
+    var titleEl = overlay ? overlay.querySelector('span') : null;
+
+    imageContainer.innerHTML = '';
+    var clone = placeholder.cloneNode(true);
+    imageContainer.appendChild(clone);
+    caption.textContent = titleEl ? titleEl.textContent : '';
+  }
+
+  function openLightbox(item) {
+    triggerElement = item;
+    var items = getVisibleItems();
+    currentIndex = items.indexOf(item);
+    showItem(currentIndex);
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+    if (triggerElement) {
+      triggerElement.focus();
+      triggerElement = null;
+    }
+  }
+
+  // Open on portfolio item click
+  document.querySelectorAll('.portfolio-item').forEach(function (item) {
+    item.addEventListener('click', function () { openLightbox(item); });
+  });
+
+  // Close
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // Nav
+  prevBtn.addEventListener('click', function (e) { e.stopPropagation(); showItem(currentIndex - 1); });
+  nextBtn.addEventListener('click', function (e) { e.stopPropagation(); showItem(currentIndex + 1); });
+
+  // Keyboard
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showItem(currentIndex - 1);
+    if (e.key === 'ArrowRight') showItem(currentIndex + 1);
+
+    // Focus trap
+    if (e.key === 'Tab') {
+      var focusable = [closeBtn, prevBtn, nextBtn];
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  // Touch swipe
+  lightbox.addEventListener('touchstart', function (e) { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+  lightbox.addEventListener('touchend', function (e) {
+    var diff = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) showItem(currentIndex - 1);
+      else showItem(currentIndex + 1);
+    }
+  });
 })();
 
 /**
